@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Copy-Move Forgery Detection</title>
+</head>
+<body>
+    <h2>Upload Image for Forgery Detection</h2>
+
+    <form method="POST" enctype="multipart/form-data">
+        <input type="file" name="image">
+        <input type="submit" value="Detect">
+    </form>
+
+    {% if input_image %}
+        <h3>Input Image:</h3>
+        <img src="{{ url_for('static', filename=input_image) }}" width="300">
+        <h3>Detected Output:</h3>
+        <img src="{{ url_for('static', filename=result_image) }}" width="300">
+    {% endif %}
+</body>
+</html>
