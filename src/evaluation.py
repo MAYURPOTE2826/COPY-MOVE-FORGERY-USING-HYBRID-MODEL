@@ -1,15 +1,23 @@
 # src/evaluation.py
 
-from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+import cv2
+import numpy as np
 
-def evaluate(y_true, y_pred):
-    """
-    Calculate evaluation metrics.
-    """
 
-    acc = accuracy_score(y_true, y_pred)
-    prec = precision_score(y_true, y_pred, zero_division=0)
-    rec = recall_score(y_true, y_pred, zero_division=0)
-    f1 = f1_score(y_true, y_pred, zero_division=0)
+def calculate_metrics(pred_mask, gt_mask):
 
-    return acc, prec, rec, f1
+    pred_mask = cv2.threshold(pred_mask, 127, 255, cv2.THRESH_BINARY)[1]
+    gt_mask = cv2.threshold(gt_mask, 127, 255, cv2.THRESH_BINARY)[1]
+
+    TP = np.sum((pred_mask == 255) & (gt_mask == 255))
+    TN = np.sum((pred_mask == 0) & (gt_mask == 0))
+    FP = np.sum((pred_mask == 255) & (gt_mask == 0))
+    FN = np.sum((pred_mask == 0) & (gt_mask == 255))
+
+    accuracy = (TP + TN) / (TP + TN + FP + FN + 1e-6)
+    precision = TP / (TP + FP + 1e-6)
+    recall = TP / (TP + FN + 1e-6)
+    f1 = 2 * precision * recall / (precision + recall + 1e-6)
+    iou = TP / (TP + FP + FN + 1e-6)
+
+    return accuracy, precision, recall, f1, iou

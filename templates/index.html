@@ -1,21 +1,171 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Copy-Move Forgery Detection</title>
+    <title>AI Copy-Move Forgery Detection</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #0f172a;
+            color: white;
+        }
+
+        header {
+            padding: 20px;
+            text-align: center;
+            background-color: #1e293b;
+            font-size: 24px;
+            font-weight: bold;
+            color: #38bdf8;
+        }
+
+        .container {
+            display: flex;
+            padding: 30px;
+            gap: 30px;
+        }
+
+        .left {
+            width: 30%;
+            background-color: #1e293b;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .right {
+            width: 70%;
+        }
+
+        .card {
+            background-color: #1e293b;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        button {
+            padding: 8px 15px;
+            background-color: #38bdf8;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0ea5e9;
+        }
+
+        .images {
+            display: flex;
+            gap: 20px;
+        }
+
+        img {
+            max-width: 100%;
+            border-radius: 10px;
+        }
+
+        .success {
+            color: #4ade80;
+            font-weight: bold;
+        }
+
+        .fail {
+            color: #f87171;
+            font-weight: bold;
+        }
+
+        .bar {
+            height: 20px;
+            background-color: #334155;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .fill {
+            height: 100%;
+            background-color: #22d3ee;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            color: gray;
+        }
+    </style>
 </head>
+
 <body>
-    <h2>Upload Image for Forgery Detection</h2>
 
-    <form method="POST" enctype="multipart/form-data">
-        <input type="file" name="image">
-        <input type="submit" value="Detect">
-    </form>
+<header>
+    Hybrid AI Copy-Move Forgery Detection System
+</header>
 
-    {% if input_image %}
-        <h3>Input Image:</h3>
-        <img src="{{ url_for('static', filename=input_image) }}" width="300">
-        <h3>Detected Output:</h3>
-        <img src="{{ url_for('static', filename=result_image) }}" width="300">
-    {% endif %}
+<div class="container">
+
+    <div class="left">
+
+        <div class="card">
+            <form method="POST" enctype="multipart/form-data">
+                <label>Upload Image:</label><br><br>
+                <input type="file" name="image" required><br><br>
+                <button type="submit">Detect Forgery</button>
+            </form>
+        </div>
+
+        {% if status %}
+        <div class="card">
+            <h3>Status</h3>
+
+            {% if "Detected" in status %}
+                <div class="success">{{ status }}</div>
+            {% else %}
+                <div class="fail">{{ status }}</div>
+            {% endif %}
+
+            {% if confidence_percent %}
+            <h4>Confidence: {{ confidence_percent }}%</h4>
+            <div class="bar">
+                <div class="fill" style="width: {{ confidence_percent }}%;"></div>
+            </div>
+            {% endif %}
+
+            {% if method %}
+            <p><b>Method Used:</b> {{ method }}</p>
+            {% endif %}
+
+        </div>
+        {% endif %}
+
+    </div>
+
+    <div class="right">
+
+        {% if input_image and result_image %}
+        <div class="images">
+
+            <div class="card">
+                <h3>Original Image</h3>
+                <img src="{{ url_for('static', filename=input_image) }}">
+            </div>
+
+            <div class="card">
+                <h3>Detection Result</h3>
+                <img src="{{ url_for('static', filename=result_image) }}">
+            </div>
+
+        </div>
+        {% endif %}
+
+    </div>
+
+</div>
+
+<footer>
+    Final Year Project | Developed by Mayur
+</footer>
+
 </body>
 </html>
