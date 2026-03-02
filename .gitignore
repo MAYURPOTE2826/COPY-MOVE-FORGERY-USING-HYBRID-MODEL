@@ -1,0 +1,13 @@
+# ==============================
+# Ignore All Images
+# ==============================
+*.png
+*.jpg
+*.jpeg
+*.gif
+
+# Ignore Dataset Folders
+raw_dataset/
+results/
+Dataset/
+static/
